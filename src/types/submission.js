@@ -1,11 +1,20 @@
+const BASE_EVIDENCE_POINTS = 10;
+const BONUS_EVIDENCE_POINTS = 25;
+
 export function createPlaceholderResult({ notes, objectLocation }) {
+  const notesProvided = notes.trim().length > 0;
+
   return {
     predictedMaterial: "Awaiting AI backend",
     objectType: objectLocation ? "Field submission" : "Unclassified artifact",
     confidence: "placeholder",
-    pointsAwarded: notes.trim() ? 25 : 10,
+    pointsAwarded: notesProvided
+      ? BONUS_EVIDENCE_POINTS
+      : BASE_EVIDENCE_POINTS,
     summary:
-      notes.trim() || "Add a backend URL to replace this placeholder result.",
+      notesProvided
+        ? notes.trim()
+        : "Add a backend URL to replace this placeholder result.",
   };
 }
 

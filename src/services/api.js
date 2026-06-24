@@ -3,7 +3,7 @@ import {
   normalizeSubmissionResult,
 } from "../types/submission";
 
-const DEFAULT_API_URL = "https://your-render-app.onrender.com/api/submissions";
+const DEFAULT_API_URL = "https://please-configure-api-url.invalid/api/submissions";
 
 export const API_URL =
   process.env.EXPO_PUBLIC_ARCHIVORY_API_URL || DEFAULT_API_URL;
@@ -14,7 +14,7 @@ function isPlaceholderApiUrl(apiUrl) {
 
     return (
       parsedUrl.protocol === "https:" &&
-      parsedUrl.hostname === "your-render-app.onrender.com" &&
+      parsedUrl.hostname === "please-configure-api-url.invalid" &&
       parsedUrl.pathname === "/api/submissions"
     );
   } catch {
