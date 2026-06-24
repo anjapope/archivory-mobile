@@ -68,7 +68,9 @@ export default function CaptureScreen({ onSubmissionComplete }) {
     } catch (error) {
       Alert.alert(
         "Submission failed",
-        "The app could not reach the server. Keep the evidence locally and try again."
+        error?.message === "invalid-api-url"
+          ? "Set EXPO_PUBLIC_ARCHIVORY_API_URL to a valid submission endpoint before using live uploads."
+          : "The app could not reach the server. Keep the evidence locally and try again."
       );
     } finally {
       setSubmitting(false);

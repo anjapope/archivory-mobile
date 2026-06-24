@@ -8,6 +8,20 @@ const DEFAULT_API_URL = "https://please-configure-api-url.invalid/api/submission
 export const API_URL =
   process.env.EXPO_PUBLIC_ARCHIVORY_API_URL || DEFAULT_API_URL;
 
+function validateApiUrl(apiUrl) {
+  const parsedUrl = new URL(apiUrl);
+
+  if (
+    !["http:", "https:"].includes(parsedUrl.protocol) ||
+    !parsedUrl.hostname ||
+    parsedUrl.pathname === "/"
+  ) {
+    throw new Error("invalid-api-url");
+  }
+
+  return parsedUrl.toString();
+}
+
 function isPlaceholderApiUrl(apiUrl) {
   try {
     const parsedUrl = new URL(apiUrl);
@@ -39,14 +53,16 @@ function createFormData({ photoUri, notes, objectLocation }) {
 }
 
 export async function submitEvidence({ photoUri, notes, objectLocation }) {
-  if (isPlaceholderApiUrl(API_URL)) {
+  const resolvedApiUrl = validateApiUrl(API_URL);
+
+  if (isPlaceholderApiUrl(resolvedApiUrl)) {
     return {
       result: createPlaceholderResult({ notes, objectLocation }),
       mode: "placeholder",
     };
   }
 
-  const response = await fetch(API_URL, {
+  const response = await fetch(resolvedApiUrl, {
     method: "POST",
     body: createFormData({ photoUri, notes, objectLocation }),
   });
