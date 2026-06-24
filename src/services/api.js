@@ -3,7 +3,24 @@ import {
   normalizeSubmissionResult,
 } from "../types/submission";
 
-export const API_URL = "https://your-render-app.onrender.com/api/submissions";
+const DEFAULT_API_URL = "https://your-render-app.onrender.com/api/submissions";
+
+export const API_URL =
+  process.env.EXPO_PUBLIC_ARCHIVORY_API_URL || DEFAULT_API_URL;
+
+function isPlaceholderApiUrl(apiUrl) {
+  try {
+    const parsedUrl = new URL(apiUrl);
+
+    return (
+      parsedUrl.protocol === "https:" &&
+      parsedUrl.hostname === "your-render-app.onrender.com" &&
+      parsedUrl.pathname === "/api/submissions"
+    );
+  } catch {
+    return apiUrl === DEFAULT_API_URL;
+  }
+}
 
 function createFormData({ photoUri, notes, objectLocation }) {
   const formData = new FormData();
@@ -22,7 +39,7 @@ function createFormData({ photoUri, notes, objectLocation }) {
 }
 
 export async function submitEvidence({ photoUri, notes, objectLocation }) {
-  if (API_URL.includes("your-render-app.onrender.com")) {
+  if (isPlaceholderApiUrl(API_URL)) {
     return {
       result: createPlaceholderResult({ notes, objectLocation }),
       mode: "placeholder",

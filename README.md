@@ -9,6 +9,9 @@ npm install
 npm start
 ```
 
+Set `EXPO_PUBLIC_ARCHIVORY_API_URL` to a real submission endpoint to replace the
+placeholder upload/result flow.
+
 The starter app includes:
 
 - phone camera access with `expo-camera`
