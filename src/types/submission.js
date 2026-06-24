@@ -2,7 +2,8 @@ const BASE_EVIDENCE_POINTS = 10;
 const BONUS_EVIDENCE_POINTS = 25;
 
 export function createPlaceholderResult({ notes, objectLocation }) {
-  const notesProvided = notes.trim().length > 0;
+  const trimmedNotes = notes.trim();
+  const notesProvided = trimmedNotes.length > 0;
 
   return {
     predictedMaterial: "Awaiting AI backend",
@@ -13,7 +14,7 @@ export function createPlaceholderResult({ notes, objectLocation }) {
       : BASE_EVIDENCE_POINTS,
     summary:
       notesProvided
-        ? notes.trim()
+        ? trimmedNotes
         : "Add a backend URL to replace this placeholder result.",
   };
 }

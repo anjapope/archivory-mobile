@@ -29,21 +29,15 @@ function validateApiUrl(apiUrl) {
     throw new Error("invalid-api-url");
   }
 
-  return parsedUrl.toString();
+  return parsedUrl;
 }
 
 function isPlaceholderApiUrl(apiUrl) {
-  try {
-    const parsedUrl = new URL(apiUrl);
-
-    return (
-      parsedUrl.protocol === "https:" &&
-      parsedUrl.hostname === "please-configure-api-url.invalid" &&
-      parsedUrl.pathname === "/api/submissions"
-    );
-  } catch {
-    return apiUrl === DEFAULT_API_URL;
-  }
+  return (
+    apiUrl.protocol === "https:" &&
+    apiUrl.hostname === "please-configure-api-url.invalid" &&
+    apiUrl.pathname === "/api/submissions"
+  );
 }
 
 function createFormData({ photoUri, notes, objectLocation }) {
@@ -72,7 +66,7 @@ export async function submitEvidence({ photoUri, notes, objectLocation }) {
     };
   }
 
-  const response = await fetch(resolvedApiUrl, {
+  const response = await fetch(resolvedApiUrl.toString(), {
     method: "POST",
     body: createFormData({ photoUri, notes, objectLocation }),
   });
