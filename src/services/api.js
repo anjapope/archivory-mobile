@@ -1,0 +1,84 @@
+import {
+  createPlaceholderResult,
+  normalizeSubmissionResult,
+} from "../types/submission";
+
+const DEFAULT_API_URL = "https://please-configure-api-url.invalid/api/submissions";
+
+export const API_URL =
+  process.env.EXPO_PUBLIC_ARCHIVORY_API_URL || DEFAULT_API_URL;
+
+function normalizeTextValue(value) {
+  return typeof value === "string" ? value : "";
+}
+
+function validateApiUrl(apiUrl) {
+  let parsedUrl;
+
+  try {
+    parsedUrl = new URL(apiUrl);
+  } catch {
+    throw new Error("invalid-api-url-format");
+  }
+
+  if (
+    !["http:", "https:"].includes(parsedUrl.protocol) ||
+    !parsedUrl.hostname ||
+    parsedUrl.pathname === "/"
+  ) {
+    throw new Error("invalid-api-url");
+  }
+
+  return parsedUrl;
+}
+
+function isPlaceholderApiUrl(apiUrl) {
+  return (
+    apiUrl.protocol === "https:" &&
+    apiUrl.hostname === "please-configure-api-url.invalid" &&
+    apiUrl.pathname === "/api/submissions"
+  );
+}
+
+function createFormData({ photoUri, notes, objectLocation }) {
+  const formData = new FormData();
+
+  formData.append("image", {
+    uri: photoUri,
+    name: "archivory-submission.jpg",
+    type: "image/jpeg",
+  });
+  formData.append("notes", normalizeTextValue(notes));
+  formData.append("objectLocation", normalizeTextValue(objectLocation));
+  formData.append("source", "mobile-app");
+  formData.append("gameMode", "evidence-submission");
+
+  return formData;
+}
+
+export async function submitEvidence({ photoUri, notes, objectLocation }) {
+  const resolvedApiUrl = validateApiUrl(API_URL);
+
+  if (isPlaceholderApiUrl(resolvedApiUrl)) {
+    return {
+      result: createPlaceholderResult({ notes, objectLocation }),
+      mode: "placeholder",
+    };
+  }
+
+  const response = await fetch(resolvedApiUrl.toString(), {
+    method: "POST",
+    body: createFormData({ photoUri, notes, objectLocation }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Submission failed with status ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  return {
+    result: normalizeSubmissionResult(data),
+    mode: "live",
+  };
+}
