@@ -1,0 +1,30 @@
+{
+  "name": "archivory-mobile",
+  "version": "1.0.0",
+  "description": "ArchIvory Mobile App",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "test": "node -e \"console.log('No tests configured')\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anjapope/archivory-mobile.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "expo": "56.0.12",
+    "expo-camera": "56.0.8",
+    "react": "19.2.3",
+    "react-native": "0.85.3"
+  },
+  "bugs": {
+    "url": "https://github.com/anjapope/archivory-mobile/issues"
+  },
+  "homepage": "https://github.com/anjapope/archivory-mobile#readme"
+}
