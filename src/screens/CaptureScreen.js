@@ -11,6 +11,8 @@ import ArtifactCard from "../components/ArtifactCard";
 import EvidenceForm from "../components/EvidenceForm";
 import { submitEvidence } from "../services/api";
 
+const PHOTO_QUALITY = 0.8;
+
 export default function CaptureScreen({ onSubmissionComplete }) {
   const cameraRef = useRef(null);
   const [permission, requestPermission] = useCameraPermissions();
@@ -45,7 +47,9 @@ export default function CaptureScreen({ onSubmissionComplete }) {
       return;
     }
 
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.8 });
+    const photo = await cameraRef.current.takePictureAsync({
+      quality: PHOTO_QUALITY,
+    });
     setPhotoUri(photo.uri);
   }
 
@@ -68,7 +72,8 @@ export default function CaptureScreen({ onSubmissionComplete }) {
     } catch (error) {
       Alert.alert(
         "Submission failed",
-        error?.message === "invalid-api-url"
+        error?.message === "invalid-api-url" ||
+        error?.message === "invalid-api-url-format"
           ? "Set EXPO_PUBLIC_ARCHIVORY_API_URL to a valid submission endpoint before using live uploads."
           : "The app could not reach the server. Keep the evidence locally and try again."
       );

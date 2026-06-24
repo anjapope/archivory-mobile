@@ -8,8 +8,18 @@ const DEFAULT_API_URL = "https://please-configure-api-url.invalid/api/submission
 export const API_URL =
   process.env.EXPO_PUBLIC_ARCHIVORY_API_URL || DEFAULT_API_URL;
 
+function normalizeTextValue(value) {
+  return typeof value === "string" ? value : "";
+}
+
 function validateApiUrl(apiUrl) {
-  const parsedUrl = new URL(apiUrl);
+  let parsedUrl;
+
+  try {
+    parsedUrl = new URL(apiUrl);
+  } catch {
+    throw new Error("invalid-api-url-format");
+  }
 
   if (
     !["http:", "https:"].includes(parsedUrl.protocol) ||
@@ -44,8 +54,8 @@ function createFormData({ photoUri, notes, objectLocation }) {
     name: "archivory-submission.jpg",
     type: "image/jpeg",
   });
-  formData.append("notes", notes);
-  formData.append("objectLocation", objectLocation);
+  formData.append("notes", normalizeTextValue(notes));
+  formData.append("objectLocation", normalizeTextValue(objectLocation));
   formData.append("source", "mobile-app");
   formData.append("gameMode", "evidence-submission");
 
