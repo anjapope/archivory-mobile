@@ -30,8 +30,8 @@ export default function EvidenceForm({
       />
 
       <Text style={styles.helperText}>
-        Image upload placeholder: this captured image will be sent with the
-        evidence record when a live API URL is configured.
+        Next step: review and submit this captured image to the database.
+        Storage is still placeholder-only until the backend endpoint is wired.
       </Text>
 
       <Button

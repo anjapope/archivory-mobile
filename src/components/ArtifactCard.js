@@ -1,11 +1,15 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
-export default function ArtifactCard({ photoUri }) {
+export default function ArtifactCard({ photoUri, photoAspectRatio = 3 / 4 }) {
   return (
     <View style={styles.card}>
       {photoUri ? (
-        <Image source={{ uri: photoUri }} style={styles.preview} />
+        <Image
+          source={{ uri: photoUri }}
+          style={[styles.preview, { aspectRatio: photoAspectRatio }]}
+          resizeMode="contain"
+        />
       ) : (
         <View style={styles.placeholder}>
           <Text style={styles.placeholderTitle}>Artifact image placeholder</Text>
@@ -27,7 +31,8 @@ const styles = StyleSheet.create({
   },
   preview: {
     width: "100%",
-    height: 240,
+    maxHeight: 300,
+    alignSelf: "center",
   },
   placeholder: {
     minHeight: 140,
