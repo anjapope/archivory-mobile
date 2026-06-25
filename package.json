@@ -8,6 +8,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
+    "web": "expo start --web",
+    "export:web": "expo export --platform web --output-dir dist && node scripts/patch-pages-base-path.js",
     "test": "node -e \"console.log('No tests configured')\""
   },
   "repository": {
@@ -28,5 +30,5 @@
   "bugs": {
     "url": "https://github.com/anjapope/archivory-mobile/issues"
   },
-  "homepage": "https://github.com/anjapope/archivory-mobile#readme"
+  "homepage": "https://anjapope.github.io/archivory-mobile/"
 }
